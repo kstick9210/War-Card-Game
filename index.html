@@ -3,11 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/card-deck-css/css/cardstarter.css">
     <link rel="stylesheet" href="css/main.css">
+    <script
+ 	src="https://code.jquery.com/jquery-3.2.1.min.js"
+ 	integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+ 	crossorigin="anonymous"></script>
     <script defer src="js/main.js"></script>
     <title>War Card Game</title>
 </head>
 <body>
-    
+    <main>
+        <header>THIS IS WAR</header>
+        <section id="landing-page">
+            <div id="rules"></div>
+            <div id="start"></div>
+            <div id="card-back">
+                <img class="card-back" src="">
+            </div>
+        </section>
+        <section id="game-board">
+            <div id="player1">
+                Player 1
+                <img class="card-back" src="">
+                <img id="in-play1" src="">
+            </div>
+            <div id="player2">
+                Player 2
+                <img class="card-back" src="">
+                <img id="in-play2" src="">
+            </div>
+            <div id="flip">flip</div>
+            <div id="reset"></div>
+        </section>
+    </main>
 </body>
 </html>

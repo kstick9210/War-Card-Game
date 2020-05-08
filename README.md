@@ -14,7 +14,7 @@
     2.2.2: If values match, war- each player flips one more card
       2.2.2.1: player with higher value on second flip gets both cards- to bottom of player's deck. If values match, loop back to step 2.2.2
 
-3: Continue until a player has 56 cards and declare winner
+3: Continue until a player has 52 cards and declare winner
 
 4: Reset button will start game again (back to step 1.1)
 ```
