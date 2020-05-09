@@ -5,29 +5,39 @@ const ranks = ['02', '03', '04', '05', '06', '07', '08', '09', '10', 'J', 'Q', '
 const masterDeck = buildMasterDeck();
 // renderDeckInContainer(masterDeck, document.getElementById('master-deck-container')); //? don't think I need this
 
-const players = {
-    one: {
-        hand: [],
-        inPlay: []
-    },
-    two: {
-        hand: [],
-        inPlay: []
-    }
-}
 
 /*----- app's state (variables) -----*/
-let shuffledDeck;
+let shuffledDeck, winner;
+
+const players = {
+  one: {
+      hand: [],
+      inPlay: []
+  },
+  two: {
+      hand: [],
+      inPlay: []
+  }
+}
 
 /*----- cached element references -----*/
 // const shuffledContainer = document.getElementById('shuffled-deck-container'); //? don't think I need this
 
 /*----- event listeners -----*/
 // document.querySelector('button').addEventListener('click', renderShuffledDeck) //? don't think I need this
+$("#start").on("click")
 $("#flip").on("click", flipCard)
 
 /*----- functions -----*/
-// TODO: functions needed: deal, flipCard, war
+// TODO: functions needed: init, xdealx, flipCard, war (to be called by flipCard), checkWinner
+init();
+
+function init() {
+  buildMasterDeck();
+  renderShuffledDeck();
+  deal();
+  winner = null;
+}
 
 function renderShuffledDeck() {
     // Create a copy of the masterDeck (leave masterDeck untouched!)
@@ -73,10 +83,26 @@ function deal() {
     players.two.hand = shuffledDeck.slice(26);
 }
 
-
 function flipCard() {
-    
+    if (winner) return;
+    players.one.inPlay.push(players.one.hand[players.one.hand.length - 1]);
+    players.one.hand.shift();
+    players.two.inPlay.push(players.two.hand[players.two.hand.length - 1]);
+    players.two.hand.shift();
+    if (players.one.inPlay[players.one.inPlay.length - 1] === players.two.inPlay[players.two.inPlay.length - 1]) {
+      flipCard() }
+    // else if () {
+      // if players.one most recent card is higher rank than players.two most recent card, then 
+      // push all cards inPlay to players.one.hand and clear inPlay }
+     else {
+      // if players.two most recent card is higher rank than players.one most recent card, then 
+      // push all cards to players.two.hand and clear inPlay
+    }
 }
-  buildMasterDeck();
-  renderShuffledDeck();
-  deal();
+
+function war() {
+
+}
+function checkWinner() {
+
+}
