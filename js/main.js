@@ -25,17 +25,16 @@ const players = {
 
 /*----- event listeners -----*/
 // document.querySelector('button').addEventListener('click', renderShuffledDeck) //? don't think I need this
-$("#start").on("click")
+$("#start").on("click", deal)
 $("#flip").on("click", flipCard)
 
 /*----- functions -----*/
-// TODO: functions needed: init, xdealx, flipCard, war (to be called by flipCard), checkWinner
+// TODO: functions needed: init, xdealx, render (called first by deal), flipCard, war (to be called by flipCard), checkWinner
 init();
 
 function init() {
   buildMasterDeck();
   renderShuffledDeck();
-  deal();
   winner = null;
 }
 
@@ -70,27 +69,32 @@ function renderShuffledDeck() {
         deck.push({
           // The 'face' property maps to the library's CSS classes for cards
           face: `${suit}${rank}`,
-          // Setting the 'value' property for game of blackjack, not war
-          value: Number(rank) || (rank === 'A' ? 11 : 10)
+          // Setting the 'value' based on rank; Aces are high
+          value: Number(rank) || (rank === 'J' ? 11 : rank === 'Q' ? 12 : rank === 'K' ? 13 : 14)
         });
       });
     });
     return deck;
   }
+
   
 function deal() {
     players.one.hand = shuffledDeck.slice(0, 26);
     players.two.hand = shuffledDeck.slice(26);
+    render();
 }
-
+function render() {
+  // DOM manipulation
+}
 function flipCard() {
     if (winner) return;
     players.one.inPlay.push(players.one.hand[players.one.hand.length - 1]);
     players.one.hand.shift();
     players.two.inPlay.push(players.two.hand[players.two.hand.length - 1]);
     players.two.hand.shift();
+    //TODO: where do I call render in this function?
     if (players.one.inPlay[players.one.inPlay.length - 1] === players.two.inPlay[players.two.inPlay.length - 1]) {
-      flipCard() }
+      war() }
     // else if () {
       // if players.one most recent card is higher rank than players.two most recent card, then 
       // push all cards inPlay to players.one.hand and clear inPlay }
@@ -101,7 +105,14 @@ function flipCard() {
 }
 
 function war() {
-
+  players.one.inPlay.push(players.one.hand[players.one.hand.length - 1]);
+  players.one.hand.shift();
+  players.one.inPlay.push(players.one.hand[players.one.hand.length - 1]);
+  players.one.hand.shift();
+  players.two.inPlay.push(players.two.hand[players.two.hand.length - 1]);
+  players.two.hand.shift();
+  players.two.inPlay.push(players.two.hand[players.two.hand.length - 1]);
+  players.two.hand.shift(); 
 }
 function checkWinner() {
 

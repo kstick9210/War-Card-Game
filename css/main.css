@@ -5,6 +5,6 @@
 body {
     background-image: url("https://live.staticflickr.com/3585/3446225050_7d6e1a7c98_k.jpg");
 }
-#flip {
+#flip, #start {
     cursor: pointer;
 }
