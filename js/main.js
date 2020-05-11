@@ -90,18 +90,26 @@ function render() {
 function flipCard() {
     if (winner) return;
     for (const player in players) {
-      players[player]["inPlay"].push(players[player]["hand"][0]);
+      players[player]["inPlay"].unshift(players[player]["hand"][0]);
       players[player]["hand"].shift();
     }
-
+    //TODO checkWinner here? what happens if this is the last card for a player?
     //TODO: where do I call render in this function?
     //TODO does this need to be multiple smaller functions??
-    if (players.one.inPlay[players.one.inPlay.length - 1] === players.two.inPlay[players.two.inPlay.length - 1]) {
-      war() }
-    // else if () {
+    //TODO need to delay these if statements so palyers have a chance to see the cards; create a new button/event listner maybe?
+    if (players.one.inPlay[0] === players.two.inPlay[0]) { war() }
+    if (players.one.inPlay[0].value > players.two.inPlay[0].value) {
+      Array.prototype.push.apply(players.one.hand, players.one.inPlay) // take player one's current cards and put them at the "bottom" of player one's hand
+      Array.prototype.push.apply(players.one.hand, players.two.inPlay) // take player two's current cards and put them at the "bottom" of player one's hand
+      players.one.inPlay = []; // reset inPlay arrays
+      players.two.inPlay = [];
       // if players.one most recent card is higher rank than players.two most recent card, then 
-      // push all cards inPlay to players.one.hand and clear inPlay }
-     else {
+      // push all cards inPlay to players.one.hand and clear inPlay 
+    } else {
+      Array.prototype.push.apply(players.two.hand, players.one.inPlay) // take player one's current cards and put them at the "bottom" of player one's hand
+      Array.prototype.push.apply(players.two.hand, players.two.inPlay) // take player two's current cards and put them at the "bottom" of player one's hand
+      players.one.inPlay = [];
+      players.two.inPlay = [];
       // if players.two most recent card is higher rank than players.one most recent card, then 
       // push all cards to players.two.hand and clear inPlay
     }
