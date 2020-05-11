@@ -29,12 +29,13 @@ $("#start").on("click", deal)
 $("#flip").on("click", flipCard)
 
 /*----- functions -----*/
-// TODO: functions needed: init, xdealx, render (called first by deal), flipCard, war (to be called by flipCard), checkWinner
+// TODO: functions needed: xinitx, xdealx, render (called first by deal), flipCard, war (to be called by flipCard), checkWinner
 init();
 
 function init() {
   buildMasterDeck();
   renderShuffledDeck();
+  //TODO call render here?
   winner = null;
 }
 
@@ -51,7 +52,7 @@ function renderShuffledDeck() {
     // renderDeckInContainer(shuffledDeck, shuffledContainer); //? don't think I need this
   }
   
-//   function renderDeckInContainer(deck, container) { //? don't think I need this
+//   function renderDeckInContainer(deck, container) { //? might be able to model render based on this
 //     container.innerHTML = '';
 //     // Let's build the cards as a string of HTML
 //     // Use reduce when you want to 'reduce' the array into a single thing - in this case a string of HTML markup 
@@ -88,11 +89,13 @@ function render() {
 }
 function flipCard() {
     if (winner) return;
-    players.one.inPlay.push(players.one.hand[players.one.hand.length - 1]);
-    players.one.hand.shift();
-    players.two.inPlay.push(players.two.hand[players.two.hand.length - 1]);
-    players.two.hand.shift();
+    for (const player in players) {
+      players[player]["inPlay"].push(players[player]["hand"][0]);
+      players[player]["hand"].shift();
+    }
+
     //TODO: where do I call render in this function?
+    //TODO does this need to be multiple smaller functions??
     if (players.one.inPlay[players.one.inPlay.length - 1] === players.two.inPlay[players.two.inPlay.length - 1]) {
       war() }
     // else if () {
@@ -105,6 +108,7 @@ function flipCard() {
 }
 
 function war() {
+  //* this needs to be a loop
   players.one.inPlay.push(players.one.hand[players.one.hand.length - 1]);
   players.one.hand.shift();
   players.one.inPlay.push(players.one.hand[players.one.hand.length - 1]);
@@ -112,8 +116,10 @@ function war() {
   players.two.inPlay.push(players.two.hand[players.two.hand.length - 1]);
   players.two.hand.shift();
   players.two.inPlay.push(players.two.hand[players.two.hand.length - 1]);
-  players.two.hand.shift(); 
+  players.two.hand.shift();
+  //TODO call render here?
 }
 function checkWinner() {
-
+  // if player one or player two hand === 52, declare winner
+  // else, render? return?
 }
