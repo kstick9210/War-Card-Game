@@ -28,7 +28,12 @@ const landingEls = {
   $cardBack: $("#landing-card-back")
 }
 const gameBoardEls = {
-  
+  $playerOne: $("#player1"),
+  $playerOneDeck: $("#card-back1"),
+  $playerOneInPlay: $("#in-play1"),
+  $playerTwo: $("#player2"),
+  $playerTwoDeck: $("#card-back2"),
+  $playerTwoInPlay: $("#in-play2")
 }
 
 /*----- event listeners -----*/
@@ -37,20 +42,29 @@ $("#start").on("click", renderStart)
 $("#flip").on("click", flipCard)
 
 /*----- functions -----*/
-// TODO: functions needed: xinitx, xdealx, render (called first by start button), flipCard, war (to be called by flipCard), checkWinner
+// TODO: functions needed: renderStart (called first by start button), renderFlip, flipCard, war (to be called by flipCard), checkWinner, reset
+// functions finished: init, deal
 
 init();
 
 function init() {
   buildMasterDeck();
   renderShuffledDeck();
+  $("#game-board").hide();
   landingEls.$rules.html("Rules");
   landingEls.$start.html("Start");
-  landingEls.$cardBack.attr("src", "css/card-deck-css/images/backs/blue.svg")
+  landingEls.$cardBack.attr("src", "css/card-deck-css/images/backs/blue.svg");
   winner = null;
 }
 function renderStart() {
-  $("#landing-page").detach();
+  $("#landing-page").hide();
+  $("#game-board").show();
+  $("#in-play1").hide();
+  $("#in-play2").hide();
+  gameBoardEls.$playerOne.html("Player 1");
+  gameBoardEls.$playerOneDeck.attr("src", "css/card-deck-css/images/backs/blue.svg");
+  gameBoardEls.$playerTwo.html("Player 2");
+  gameBoardEls.$playerTwoDeck.attr("src", "css/card-deck-css/images/backs/blue.svg");
   deal();
 }
 

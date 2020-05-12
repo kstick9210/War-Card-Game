@@ -8,35 +8,75 @@ body {
     justify-content: center;
     font-family: 'Teko', sans-serif;
 }
-#landing-page {
-    display: grid;
-    grid-template-columns: 157px 157px;
-    grid-template-rows: 438px 50px;
-    grid-template-areas:
-        "landing-card-back landing-card-back"
-        "rules start";
-    font-weight: 400;
-    font-size: 45px;
-}
 header {
     grid-area: header;
     font-weight: 500;
     font-size: 80px;
     text-align: center;
 }
-#flip, #start {
-    cursor: pointer;
+#landing-page {
+    display: grid;
+    grid-template-columns: 80px 164px 70px;
+    grid-template-rows: 438px 50px;
+    grid-template-areas:
+        "landing-card-back landing-card-back landing-card-back"
+        "rules . start";
+    font-weight: 400;
+    font-size: 45px;
 }
+.click { cursor: pointer; }
+.click:hover { transform: scale(1.2); }
+#rules { grid-area: rules; }
 #start {
     grid-area: start;
     text-align: right;
-}
-#rules {
-    grid-area: rules;
 }
 #landing-card-back {
     grid-area: landing-card-back;
     background-color: white;
     border-radius: 5%;
     width: 314px;
+}
+
+#game-board {
+    display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: 2fr 1fr 1fr 2fr;
+    grid-template-areas: 
+        ". flip flip ."
+        "player1 . . player2"
+        "card-back1 in-play1 in-play2 card-back2"
+        ". reset reset .";
+    font-weight: 300;
+    font-size: 40px;
+}
+#player1 {
+    grid-area: player1;
+}
+#card-back1 {
+    grid-area: card-back1;
+}
+#in-play1 {
+    grid-area: in-play1;
+    margin-right: 5px;
+}
+#player2 {
+    grid-area: player2;
+    text-align: right;
+}
+#card-back2 {
+    grid-area: card-back2;
+    justify-self: right;
+}
+#in-play2 {
+    grid-area: in-play2;
+    margin-left: 5px;
+}
+#flip {
+    grid-area: flip;
+    text-align: center;
+}
+#reset {
+    grid-area: reset;
+    text-align: center;
 }
