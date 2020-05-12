@@ -30,10 +30,10 @@ const landingEls = {
 const gameBoardEls = {
   $playerOne: $("#player1"),
   $playerOneDeck: $("#card-back1"),
-  $playerOneInPlay: $("#in-play1"),
+  // $playerOneInPlay: $("#in-play1"),
   $playerTwo: $("#player2"),
   $playerTwoDeck: $("#card-back2"),
-  $playerTwoInPlay: $("#in-play2")
+  // $playerTwoInPlay: $("#in-play2")
 }
 
 /*----- event listeners -----*/
@@ -42,8 +42,8 @@ $("#start").on("click", renderStart)
 $("#flip").on("click", flipCard)
 
 /*----- functions -----*/
-// TODO: functions needed: renderStart (called first by start button), renderFlip, flipCard, war (to be called by flipCard), checkWinner, reset
-// functions finished: init, deal
+// TODO: functions needed: renderFlip, flipCard, war (to be called by flipCard), checkWinner, reset
+// functions finished: init, deal, renderStart
 
 init();
 
@@ -59,13 +59,21 @@ function init() {
 function renderStart() {
   $("#landing-page").hide();
   $("#game-board").show();
-  $("#in-play1").hide();
-  $("#in-play2").hide();
   gameBoardEls.$playerOne.html("Player 1");
   gameBoardEls.$playerOneDeck.attr("src", "css/card-deck-css/images/backs/blue.svg");
   gameBoardEls.$playerTwo.html("Player 2");
   gameBoardEls.$playerTwoDeck.attr("src", "css/card-deck-css/images/backs/blue.svg");
   deal();
+}
+function renderFlip() {
+    players.one.inPlay.forEach(function(card) {
+      const $playerOneInPlay = $("#in-play1");
+      $playerOneInPlay.addClass(`card ${card.face}`);
+    })
+    players.two.inPlay.forEach(function(card) {
+      const $playerTwoInPlay = $("#in-play2");
+      $playerTwoInPlay.addClass(`card ${card.face}`);
+    })
 }
 
 function renderShuffledDeck() {
@@ -111,34 +119,41 @@ function renderShuffledDeck() {
 function deal() {
     players.one.hand = shuffledDeck.slice(0, 26);
     players.two.hand = shuffledDeck.slice(26);
+    console.log("made it to deal function");
 }
 function flipCard() {
+  console.log("start of flipCard")
     if (winner) return; // prevent users from fliping cards if game is over
-    if (players.one.inPlay || players.two.inPlay) return // prevent users from flipping cards until current turn is resolved
+    console.log("checked winner");
+    if (!players.one.inPlay || !players.two.inPlay) return // prevent users from flipping cards until current turn is resolved (empty arrays are truthy)
+    console.log("checked if cards are in play");
     for (const player in players) {
       players[player]["inPlay"].unshift(players[player]["hand"][0]);
       players[player]["hand"].shift();
     }
+    console.log("cards have been assigned to arrays");
+    renderFlip();
     //TODO checkWinner here? what happens if this is the last card for a player?
-    //TODO: where do I call render in this function?
     //TODO does this need to be multiple smaller functions??
     //TODO need to delay these if statements so palyers have a chance to see the cards; create a new button/event listner maybe?
-    if (players.one.inPlay[0] === players.two.inPlay[0]) war();
-    if (players.one.inPlay[0].value > players.two.inPlay[0].value) {
-      Array.prototype.push.apply(players.one.hand, players.one.inPlay) // take player one's current cards and put them at the "bottom" of player one's hand
-      Array.prototype.push.apply(players.one.hand, players.two.inPlay) // take player two's current cards and put them at the "bottom" of player one's hand
-      players.one.inPlay = []; // reset inPlay arrays
-      players.two.inPlay = [];
-      // if players.one most recent card is higher rank than players.two most recent card, then 
-      // push all cards inPlay to players.one.hand and clear inPlay 
-    } else {
-      Array.prototype.push.apply(players.two.hand, players.one.inPlay) // take player one's current cards and put them at the "bottom" of player one's hand
-      Array.prototype.push.apply(players.two.hand, players.two.inPlay) // take player two's current cards and put them at the "bottom" of player one's hand
-      players.one.inPlay = [];
-      players.two.inPlay = [];
-      // if players.two most recent card is higher rank than players.one most recent card, then 
-      // push all cards to players.two.hand and clear inPlay
-    }
+}
+function someOtherFunction() {
+  if (players.one.inPlay[0] === players.two.inPlay[0]) war();
+  if (players.one.inPlay[0].value > players.two.inPlay[0].value) {
+    Array.prototype.push.apply(players.one.hand, players.one.inPlay) // take player one's current cards and put them at the "bottom" of player one's hand
+    Array.prototype.push.apply(players.one.hand, players.two.inPlay) // take player two's current cards and put them at the "bottom" of player one's hand
+    players.one.inPlay = []; // reset inPlay arrays
+    players.two.inPlay = [];
+    // if players.one most recent card is higher rank than players.two most recent card, then 
+    // push all cards inPlay to players.one.hand and clear inPlay 
+  } else {
+    Array.prototype.push.apply(players.two.hand, players.one.inPlay) // take player one's current cards and put them at the "bottom" of player one's hand
+    Array.prototype.push.apply(players.two.hand, players.two.inPlay) // take player two's current cards and put them at the "bottom" of player one's hand
+    players.one.inPlay = [];
+    players.two.inPlay = [];
+    // if players.two most recent card is higher rank than players.one most recent card, then 
+    // push all cards to players.two.hand and clear inPlay
+  }
 }
 
 function war() {

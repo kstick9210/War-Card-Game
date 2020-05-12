@@ -37,11 +37,10 @@ header {
     border-radius: 5%;
     width: 314px;
 }
-
 #game-board {
     display: grid;
     grid-template-rows: auto;
-    grid-template-columns: 2fr 1fr 1fr 2fr;
+    grid-template-columns: 25vw 14vw 14vw 25vw;
     grid-template-areas: 
         ". flip flip ."
         "player1 . . player2"
