@@ -22,21 +22,36 @@ const players = {
 
 /*----- cached element references -----*/
 // const shuffledContainer = document.getElementById('shuffled-deck-container'); //? don't think I need this
+const landingEls = {
+  $rules: $("#rules"),
+  $start: $("#start"),
+  $cardBack: $("#landing-card-back")
+}
+const gameBoardEls = {
+  
+}
 
 /*----- event listeners -----*/
 // document.querySelector('button').addEventListener('click', renderShuffledDeck) //? don't think I need this
-$("#start").on("click", deal)
+$("#start").on("click", renderStart)
 $("#flip").on("click", flipCard)
 
 /*----- functions -----*/
-// TODO: functions needed: xinitx, xdealx, render (called first by deal), flipCard, war (to be called by flipCard), checkWinner
+// TODO: functions needed: xinitx, xdealx, render (called first by start button), flipCard, war (to be called by flipCard), checkWinner
+
 init();
 
 function init() {
   buildMasterDeck();
   renderShuffledDeck();
-  //TODO call render here?
+  landingEls.$rules.html("Rules");
+  landingEls.$start.html("Start");
+  landingEls.$cardBack.attr("src", "css/card-deck-css/images/backs/blue.svg")
   winner = null;
+}
+function renderStart() {
+  $("#landing-page").detach();
+  deal();
 }
 
 function renderShuffledDeck() {
@@ -82,13 +97,10 @@ function renderShuffledDeck() {
 function deal() {
     players.one.hand = shuffledDeck.slice(0, 26);
     players.two.hand = shuffledDeck.slice(26);
-    render();
-}
-function render() {
-  // DOM manipulation
 }
 function flipCard() {
-    if (winner) return;
+    if (winner) return; // prevent users from fliping cards if game is over
+    if (players.one.inPlay || players.two.inPlay) return // prevent users from flipping cards until current turn is resolved
     for (const player in players) {
       players[player]["inPlay"].unshift(players[player]["hand"][0]);
       players[player]["hand"].shift();
@@ -97,7 +109,7 @@ function flipCard() {
     //TODO: where do I call render in this function?
     //TODO does this need to be multiple smaller functions??
     //TODO need to delay these if statements so palyers have a chance to see the cards; create a new button/event listner maybe?
-    if (players.one.inPlay[0] === players.two.inPlay[0]) { war() }
+    if (players.one.inPlay[0] === players.two.inPlay[0]) war();
     if (players.one.inPlay[0].value > players.two.inPlay[0].value) {
       Array.prototype.push.apply(players.one.hand, players.one.inPlay) // take player one's current cards and put them at the "bottom" of player one's hand
       Array.prototype.push.apply(players.one.hand, players.two.inPlay) // take player two's current cards and put them at the "bottom" of player one's hand
@@ -117,6 +129,7 @@ function flipCard() {
 
 function war() {
   //* this needs to be a loop
+  //TODO checkWinner here? how to resolve game if last card flip is a tie
   players.one.inPlay.push(players.one.hand[players.one.hand.length - 1]);
   players.one.hand.shift();
   players.one.inPlay.push(players.one.hand[players.one.hand.length - 1]);

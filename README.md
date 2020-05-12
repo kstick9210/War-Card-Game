@@ -22,6 +22,6 @@
 ## Technologies Used:
 * HTML
 * CSS
-* Javascript
+* Javascript/jQuery
 ## Getting Started
 ## Next Steps

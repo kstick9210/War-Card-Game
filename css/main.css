@@ -3,8 +3,40 @@
     margin: 0;
 }
 body {
-    background-image: url("https://live.staticflickr.com/3585/3446225050_7d6e1a7c98_k.jpg");
+    background-image: url(./green-texture-background.png);
+    display: grid;
+    justify-content: center;
+    font-family: 'Teko', sans-serif;
+}
+#landing-page {
+    display: grid;
+    grid-template-columns: 157px 157px;
+    grid-template-rows: 438px 50px;
+    grid-template-areas:
+        "landing-card-back landing-card-back"
+        "rules start";
+    font-weight: 400;
+    font-size: 45px;
+}
+header {
+    grid-area: header;
+    font-weight: 500;
+    font-size: 80px;
+    text-align: center;
 }
 #flip, #start {
     cursor: pointer;
+}
+#start {
+    grid-area: start;
+    text-align: right;
+}
+#rules {
+    grid-area: rules;
+}
+#landing-card-back {
+    grid-area: landing-card-back;
+    background-color: white;
+    border-radius: 5%;
+    width: 314px;
 }
