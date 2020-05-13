@@ -42,9 +42,8 @@ header {
     grid-template-rows: auto;
     grid-template-columns: 25vw 14vw 14vw 25vw;
     grid-template-areas: 
-        ". flip flip ."
         "player1 . . player2"
-        "count1 . . count2"
+        "count1 flip flip count2"
         "card-back1 in-play1 in-play2 card-back2"
         ". take take ."
         ". reset reset .";
@@ -91,4 +90,5 @@ header {
 #reset {
     grid-area: reset;
     text-align: center;
+    padding-top: 1em;
 }

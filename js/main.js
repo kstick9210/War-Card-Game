@@ -12,13 +12,11 @@ let shuffledDeck, winner;
 const players = {
   one: {
       hand: [],
-      inPlay: [],
-      cardCount: null
+      inPlay: []
   },
   two: {
       hand: [],
-      inPlay: [],
-      cardCount: null
+      inPlay: []
   }
 }
 
@@ -31,15 +29,17 @@ const landingEls = {
 }
 const gameBoardEls = {
   $playerOne: $("#player1"),
+  $playerOneCount: $("#count1"),
   $playerOneDeck: $("#card-back1"),
   $playerTwo: $("#player2"),
+  $playerTwoCount: $("#count2"),
   $playerTwoDeck: $("#card-back2"),
 }
 
 /*----- event listeners -----*/
 // document.querySelector('button').addEventListener('click', renderShuffledDeck) //? don't think I need this
 $("#start").on("click", renderStart)
-$("#rules").on("click", showRules)
+// $("#rules").on("click", showRules)
 $("#flip").on("click", flipCard)
 $("#take").on("click", takeCards)
 
@@ -67,15 +67,17 @@ function renderStart() {
   gameBoardEls.$playerTwo.html("Player 2");
   gameBoardEls.$playerTwoDeck.attr("src", "css/card-deck-css/images/backs/blue.svg");
   deal();
+  gameBoardEls.$playerOneCount.html(`Card count: ${players.one.hand.length}`);
+  gameBoardEls.$playerTwoCount.html(`Card count: ${players.two.hand.length}`);
 }
 function renderFlip() {
     players.one.inPlay.forEach(function(card) {
       const $playerOneInPlay = $("#in-play1");
-      $playerOneInPlay.addClass(`card ${card.face}`);
+      $playerOneInPlay.append("<div></div>").addClass(`card ${card.face}`);
     })
     players.two.inPlay.forEach(function(card) {
       const $playerTwoInPlay = $("#in-play2");
-      $playerTwoInPlay.addClass(`card ${card.face}`);
+      $playerTwoInPlay.append("<div></div>").addClass(`card ${card.face}`);
     })
 }
 function takeCardsRender() {
@@ -83,7 +85,12 @@ function takeCardsRender() {
     $playerOneInPlay.removeClass();
     const $playerTwoInPlay = $("#in-play2");
     $playerTwoInPlay.removeClass();
-  console.log("takeCardsRender complete");
+    gameBoardEls.$playerOneCount.html(`Card count: ${players.one.hand.length}`);
+    gameBoardEls.$playerTwoCount.html(`Card count: ${players.two.hand.length}`);
+
+}
+function renderWinner() {
+  // modal here?
 }
 function renderShuffledDeck() {
     // Create a copy of the masterDeck (leave masterDeck untouched!)
@@ -108,42 +115,38 @@ function renderShuffledDeck() {
 //     container.innerHTML = cardsHtml;
 //   }
   
-  function buildMasterDeck() {
-    const deck = [];
-    // Use nested forEach to generate card objects
-    suits.forEach(function(suit) {
-      ranks.forEach(function(rank) {
-        deck.push({
-          // The 'face' property maps to the library's CSS classes for cards
-          face: `${suit}${rank}`,
-          // Setting the 'value' based on rank; Aces are high
-          value: Number(rank) || (rank === 'J' ? 11 : rank === 'Q' ? 12 : rank === 'K' ? 13 : 14)
-        });
+function buildMasterDeck() {
+  const deck = [];
+  // Use nested forEach to generate card objects
+  suits.forEach(function(suit) {
+    ranks.forEach(function(rank) {
+      deck.push({
+        // The 'face' property maps to the library's CSS classes for cards
+        face: `${suit}${rank}`,
+        // Setting the 'value' based on rank; Aces are high
+        value: Number(rank) || (rank === 'J' ? 11 : rank === 'Q' ? 12 : rank === 'K' ? 13 : 14)
       });
     });
-    return deck;
-  }
+  });
+  return deck;
+}
   
 function deal() {
     players.one.hand = shuffledDeck.slice(0, 26);
     players.two.hand = shuffledDeck.slice(26);
-    console.log("made it to deal function");
 }
 function flipCard() {
-  console.log("start of flipCard")
     if (winner) return; // prevent users from fliping cards if game is over
-    console.log("checked winner");
-    if (players.one.inPlay.length > 0 || players.two.inPlay.length > 0) return // prevent users from flipping cards until current turn is resolved (empty arrays are truthy)
-    console.log("checked if cards are in play");
+    if (players.one.inPlay.length > 0 || players.two.inPlay.length > 0) return // prevent users from flipping cards until current turn is resolved
     for (const player in players) {
       players[player]["inPlay"].unshift(players[player]["hand"][0]);
       players[player]["hand"].shift();
     }
-    console.log("cards have been assigned to arrays");
     renderFlip();
     //TODO checkWinner here? what happens if this is the last card for a player?
 }
 function takeCards() {
+  if (players.one.inPlay.length === 0 || players.two.inPlay.length === 0) return // function will return if there are no cards in play
   if (players.one.inPlay[0] === players.two.inPlay[0]) war();
   if (players.one.inPlay[0].value > players.two.inPlay[0].value) {
     Array.prototype.push.apply(players.one.hand, players.one.inPlay) // take player one's current cards and put them at the "bottom" of player one's hand
@@ -159,9 +162,9 @@ function takeCards() {
     takeCardsRender();
   }
 }
-
 function war() {
   //* this needs to be a loop
+  // if () // if user flips over last card and it initiates war, declare winner ()
   //TODO checkWinner here? how to resolve game if last card flip is a tie
   players.one.inPlay.push(players.one.hand[players.one.hand.length - 1]);
   players.one.hand.shift();
@@ -176,7 +179,15 @@ function war() {
 function checkWinner() {
   // if player one or player two hand === 52, declare winner
   // else, render? return?
-  return (players.one.hand.length === 52 || players.two.hand.length === 52);
+  if (players.one.hand.length === 52) {
+    winner = $playerOne;
+    renderWinner();
+  }
+  if (players.two.hand.length === 52) {
+    winner = $playerTwo;
+    renderWinner();
+  }
+  return winner;
 }
 function showRules() {
   $("#landing-page").hide();
