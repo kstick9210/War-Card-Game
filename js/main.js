@@ -40,6 +40,7 @@ const gameBoardEls = {
 // document.querySelector('button').addEventListener('click', renderShuffledDeck) //? don't think I need this
 $("#start").on("click", renderStart)
 $("#flip").on("click", flipCard)
+$("#rules").on("click", showRules)
 
 /*----- functions -----*/
 // TODO: functions needed: renderFlip, flipCard, war (to be called by flipCard), checkWinner, reset
@@ -51,6 +52,7 @@ function init() {
   buildMasterDeck();
   renderShuffledDeck();
   $("#game-board").hide();
+  $("div > p").hide();
   landingEls.$rules.html("Rules");
   landingEls.$start.html("Start");
   landingEls.$cardBack.attr("src", "css/card-deck-css/images/backs/blue.svg");
@@ -172,4 +174,8 @@ function war() {
 function checkWinner() {
   // if player one or player two hand === 52, declare winner
   // else, render? return?
+}
+function showRules() {
+  $("#landing-page").hide();
+  $("div > p").show();
 }
