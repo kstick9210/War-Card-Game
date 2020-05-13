@@ -18,7 +18,8 @@
 
 4: Reset button will start game again (back to step 1.1)
 ```
-## -Screenshots Placeholder-
+![Landing Page](./Screenshot1.png)
+![Game Board](./Screenshot2.png)
 ## Technologies Used:
 * HTML
 * CSS
