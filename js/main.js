@@ -12,11 +12,13 @@ let shuffledDeck, winner;
 const players = {
   one: {
       hand: [],
-      inPlay: []
+      inPlay: [],
+      cardCount: null
   },
   two: {
       hand: [],
-      inPlay: []
+      inPlay: [],
+      cardCount: null
   }
 }
 
@@ -30,17 +32,16 @@ const landingEls = {
 const gameBoardEls = {
   $playerOne: $("#player1"),
   $playerOneDeck: $("#card-back1"),
-  // $playerOneInPlay: $("#in-play1"),
   $playerTwo: $("#player2"),
   $playerTwoDeck: $("#card-back2"),
-  // $playerTwoInPlay: $("#in-play2")
 }
 
 /*----- event listeners -----*/
 // document.querySelector('button').addEventListener('click', renderShuffledDeck) //? don't think I need this
 $("#start").on("click", renderStart)
-$("#flip").on("click", flipCard)
 $("#rules").on("click", showRules)
+$("#flip").on("click", flipCard)
+$("#take").on("click", takeCards)
 
 /*----- functions -----*/
 // TODO: functions needed: renderFlip, flipCard, war (to be called by flipCard), checkWinner, reset
@@ -77,7 +78,13 @@ function renderFlip() {
       $playerTwoInPlay.addClass(`card ${card.face}`);
     })
 }
-
+function takeCardsRender() {
+    const $playerOneInPlay = $("#in-play1");
+    $playerOneInPlay.removeClass();
+    const $playerTwoInPlay = $("#in-play2");
+    $playerTwoInPlay.removeClass();
+  console.log("takeCardsRender complete");
+}
 function renderShuffledDeck() {
     // Create a copy of the masterDeck (leave masterDeck untouched!)
     const tempDeck = [...masterDeck];
@@ -116,7 +123,6 @@ function renderShuffledDeck() {
     });
     return deck;
   }
-
   
 function deal() {
     players.one.hand = shuffledDeck.slice(0, 26);
@@ -127,7 +133,7 @@ function flipCard() {
   console.log("start of flipCard")
     if (winner) return; // prevent users from fliping cards if game is over
     console.log("checked winner");
-    if (!players.one.inPlay || !players.two.inPlay) return // prevent users from flipping cards until current turn is resolved (empty arrays are truthy)
+    if (players.one.inPlay.length > 0 || players.two.inPlay.length > 0) return // prevent users from flipping cards until current turn is resolved (empty arrays are truthy)
     console.log("checked if cards are in play");
     for (const player in players) {
       players[player]["inPlay"].unshift(players[player]["hand"][0]);
@@ -136,25 +142,21 @@ function flipCard() {
     console.log("cards have been assigned to arrays");
     renderFlip();
     //TODO checkWinner here? what happens if this is the last card for a player?
-    //TODO does this need to be multiple smaller functions??
-    //TODO need to delay these if statements so palyers have a chance to see the cards; create a new button/event listner maybe?
 }
-function someOtherFunction() {
+function takeCards() {
   if (players.one.inPlay[0] === players.two.inPlay[0]) war();
   if (players.one.inPlay[0].value > players.two.inPlay[0].value) {
     Array.prototype.push.apply(players.one.hand, players.one.inPlay) // take player one's current cards and put them at the "bottom" of player one's hand
     Array.prototype.push.apply(players.one.hand, players.two.inPlay) // take player two's current cards and put them at the "bottom" of player one's hand
-    players.one.inPlay = []; // reset inPlay arrays
+    players.one.inPlay = []; // reset inPlay arrays once winner of th round has taken cards
     players.two.inPlay = [];
-    // if players.one most recent card is higher rank than players.two most recent card, then 
-    // push all cards inPlay to players.one.hand and clear inPlay 
+    takeCardsRender();
   } else {
     Array.prototype.push.apply(players.two.hand, players.one.inPlay) // take player one's current cards and put them at the "bottom" of player one's hand
     Array.prototype.push.apply(players.two.hand, players.two.inPlay) // take player two's current cards and put them at the "bottom" of player one's hand
     players.one.inPlay = [];
     players.two.inPlay = [];
-    // if players.two most recent card is higher rank than players.one most recent card, then 
-    // push all cards to players.two.hand and clear inPlay
+    takeCardsRender();
   }
 }
 
@@ -169,11 +171,12 @@ function war() {
   players.two.hand.shift();
   players.two.inPlay.push(players.two.hand[players.two.hand.length - 1]);
   players.two.hand.shift();
-  //TODO call render here?
+  renderFlip();
 }
 function checkWinner() {
   // if player one or player two hand === 52, declare winner
   // else, render? return?
+  return (players.one.hand.length === 52 || players.two.hand.length === 52);
 }
 function showRules() {
   $("#landing-page").hide();
