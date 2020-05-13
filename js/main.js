@@ -34,6 +34,7 @@ const gameBoardEls = {
   $playerTwo: $("#player2"),
   $playerTwoCount: $("#count2"),
   $playerTwoDeck: $("#card-back2"),
+  $gameMsg: $("#msg")
 }
 
 /*----- event listeners -----*/
@@ -71,21 +72,13 @@ function renderStart() {
   gameBoardEls.$playerTwoCount.html(`Card count: ${players.two.hand.length}`);
 }
 function renderFlip() {
-    // players.one.inPlay.forEach(function(card) {
-    //   // const $playerOneInPlay = $("#in-play1");
-    //   $playerOneInPlay.append(`<div class="card ${card.face}"></div>`);
-    // })
+    gameBoardEls.$gameMsg.empty(); // remove any game messages, if present on board
     const $playerOneInPlay = $("#in-play1");
     const recentCard1 = players.one.inPlay[0].face;
     $playerOneInPlay.append(`<div class="card ${recentCard1}"></div>`);
     const $playerTwoInPlay = $("#in-play2");
     const recentCard2 = players.two.inPlay[0].face;
     $playerTwoInPlay.append(`<div class="card ${recentCard2}"></div>`);
-
-    // players.two.inPlay.forEach(function(card) {
-    //   const $playerTwoInPlay = $("#in-play2");
-    //   $playerTwoInPlay.append(`<div class="card ${card.face}"></div>`);
-    // })
 }
 function takeCardsRender() {
     const $playerOneInPlay = $("#in-play1"); // need  child selector?
@@ -94,7 +87,15 @@ function takeCardsRender() {
     $playerTwoInPlay.empty();
     gameBoardEls.$playerOneCount.html(`Card count: ${players.one.hand.length}`);
     gameBoardEls.$playerTwoCount.html(`Card count: ${players.two.hand.length}`);
-
+}
+function renderWar() {
+  console.log("render war began");
+  checkWinner();
+  console.log("checkWinner was called from renderWar and did not find a winner");
+  if (winner) return;
+  console.log("winner is still null, so renderWar proceeds");
+  gameBoardEls.$gameMsg.html(`This means WAR! Flip another card.`)
+  console.log(`this message should be on the game board: ${gameBoardEls.$gameMsg}`)
 }
 function renderWinner() {
   // modal here?
@@ -145,16 +146,16 @@ function deal() {
 function flipCard() {
     if (winner) return; // prevent users from fliping cards if game is over
     // if (players.one.inPlay.length > 0 || players.two.inPlay.length > 0) return // prevent users from flipping cards until current turn is resolved
+    if (players.one.inPlay.length > 0 && players.one.inPlay[0].value !== players.two.inPlay[0].value) return // prevent users from flipping cards if cards are in play and it is not war
     for (const player in players) {
       players[player]["inPlay"].unshift(players[player]["hand"][0]);
       players[player]["hand"].shift();
     }
     renderFlip();
-    //TODO checkWinner here? what happens if this is the last card for a player?
+    if (players.one.inPlay[0].value === players.two.inPlay[0].value) { renderWar() };
 }
 function takeCards() {
   if (players.one.inPlay.length === 0 || players.two.inPlay.length === 0) return // function will return if there are no cards in play
-  if (players.one.inPlay[0] === players.two.inPlay[0]) war();
   if (players.one.inPlay[0].value > players.two.inPlay[0].value) {
     Array.prototype.push.apply(players.one.hand, players.one.inPlay) // take player one's current cards and put them at the "bottom" of player one's hand
     Array.prototype.push.apply(players.one.hand, players.two.inPlay) // take player two's current cards and put them at the "bottom" of player one's hand
@@ -168,29 +169,30 @@ function takeCards() {
     players.two.inPlay = [];
     takeCardsRender();
   }
+  checkWinner();
 }
-function war() {
-  //* this needs to be a loop
-  // if () // if user flips over last card and it initiates war, declare winner ()
-  //TODO checkWinner here? how to resolve game if last card flip is a tie
-  players.one.inPlay.push(players.one.hand[players.one.hand.length - 1]);
-  players.one.hand.shift();
-  players.one.inPlay.push(players.one.hand[players.one.hand.length - 1]);
-  players.one.hand.shift();
-  players.two.inPlay.push(players.two.hand[players.two.hand.length - 1]);
-  players.two.hand.shift();
-  players.two.inPlay.push(players.two.hand[players.two.hand.length - 1]);
-  players.two.hand.shift();
-  renderFlip();
-}
+// function war() { //? might not need this
+
+//   //* this needs to be a loop
+//   // if () // if user flips over last card and it initiates war, declare winner ()
+//   //TODO checkWinner here? how to resolve game if last card flip is a tie
+//   players.one.inPlay.push(players.one.hand[players.one.hand.length - 1]);
+//   players.one.hand.shift();
+//   players.one.inPlay.push(players.one.hand[players.one.hand.length - 1]);
+//   players.one.hand.shift();
+//   players.two.inPlay.push(players.two.hand[players.two.hand.length - 1]);
+//   players.two.hand.shift();
+//   players.two.inPlay.push(players.two.hand[players.two.hand.length - 1]);
+//   players.two.hand.shift();
+//   renderFlip();
+// }
 function checkWinner() {
   // if player one or player two hand === 52, declare winner
   // else, render? return?
   if (players.one.hand.length === 52) {
     winner = $playerOne;
     renderWinner();
-  }
-  if (players.two.hand.length === 52) {
+  } else if (players.two.hand.length === 52) {
     winner = $playerTwo;
     renderWinner();
   }

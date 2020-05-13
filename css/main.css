@@ -42,7 +42,7 @@ header {
     grid-template-rows: auto;
     grid-template-columns: 25vw 14vw 14vw 25vw;
     grid-template-areas: 
-        "player1 . . player2"
+        "player1 msg msg player2"
         "count1 flip flip count2"
         "card-back1 in-play1 in-play2 card-back2"
         ". take take ."
@@ -81,6 +81,10 @@ header {
 }
 #flip {
     grid-area: flip;
+    text-align: center;
+}
+#msg {
+    grid-area: msg;
     text-align: center;
 }
 #take {
