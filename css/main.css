@@ -16,8 +16,8 @@ header {
 }
 #landing-page {
     display: grid;
-    grid-template-columns: 80px 164px 70px;
-    grid-template-rows: 438px 50px;
+    grid-template-columns: 6vw 11vw 5vw;
+    grid-template-rows: 52vh 6vh;
     grid-template-areas:
         "landing-card-back landing-card-back landing-card-back"
         "rules . start";
@@ -35,7 +35,7 @@ header {
     grid-area: landing-card-back;
     background-color: white;
     border-radius: 5%;
-    width: 314px;
+    width: 22vw;
 }
 #game-board {
     display: grid;

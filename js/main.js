@@ -71,20 +71,27 @@ function renderStart() {
   gameBoardEls.$playerTwoCount.html(`Card count: ${players.two.hand.length}`);
 }
 function renderFlip() {
-    players.one.inPlay.forEach(function(card) {
-      const $playerOneInPlay = $("#in-play1");
-      $playerOneInPlay.append("<div></div>").addClass(`card ${card.face}`);
-    })
-    players.two.inPlay.forEach(function(card) {
-      const $playerTwoInPlay = $("#in-play2");
-      $playerTwoInPlay.append("<div></div>").addClass(`card ${card.face}`);
-    })
+    // players.one.inPlay.forEach(function(card) {
+    //   // const $playerOneInPlay = $("#in-play1");
+    //   $playerOneInPlay.append(`<div class="card ${card.face}"></div>`);
+    // })
+    const $playerOneInPlay = $("#in-play1");
+    const recentCard1 = players.one.inPlay[0].face;
+    $playerOneInPlay.append(`<div class="card ${recentCard1}"></div>`);
+    const $playerTwoInPlay = $("#in-play2");
+    const recentCard2 = players.two.inPlay[0].face;
+    $playerTwoInPlay.append(`<div class="card ${recentCard2}"></div>`);
+
+    // players.two.inPlay.forEach(function(card) {
+    //   const $playerTwoInPlay = $("#in-play2");
+    //   $playerTwoInPlay.append(`<div class="card ${card.face}"></div>`);
+    // })
 }
 function takeCardsRender() {
-    const $playerOneInPlay = $("#in-play1");
-    $playerOneInPlay.removeClass();
+    const $playerOneInPlay = $("#in-play1"); // need  child selector?
+    $playerOneInPlay.empty();
     const $playerTwoInPlay = $("#in-play2");
-    $playerTwoInPlay.removeClass();
+    $playerTwoInPlay.empty();
     gameBoardEls.$playerOneCount.html(`Card count: ${players.one.hand.length}`);
     gameBoardEls.$playerTwoCount.html(`Card count: ${players.two.hand.length}`);
 
@@ -137,7 +144,7 @@ function deal() {
 }
 function flipCard() {
     if (winner) return; // prevent users from fliping cards if game is over
-    if (players.one.inPlay.length > 0 || players.two.inPlay.length > 0) return // prevent users from flipping cards until current turn is resolved
+    // if (players.one.inPlay.length > 0 || players.two.inPlay.length > 0) return // prevent users from flipping cards until current turn is resolved
     for (const player in players) {
       players[player]["inPlay"].unshift(players[player]["hand"][0]);
       players[player]["hand"].shift();
