@@ -157,7 +157,8 @@ function flipCard() {
     if (players.one.inPlay[0].value === players.two.inPlay[0].value) { renderWar() };
 }
 function takeCards() {
-  if (players.one.inPlay.length === 0 || players.two.inPlay.length === 0) return // function will return if there are no cards in play
+  if (players.one.inPlay.length === 0) return // function will return if there are no cards in play; inPlay arrays should always be the same length, so only need to check one array
+  if (players.one.inPlay[0].value === players.two.inPlay[0].value) return // if war, prevent users from taking cards until war is resolved
   if (players.one.inPlay[0].value > players.two.inPlay[0].value) {
     Array.prototype.push.apply(players.one.hand, players.one.inPlay) // take player one's current cards and put them at the "bottom" of player one's hand
     Array.prototype.push.apply(players.one.hand, players.two.inPlay) // take player two's current cards and put them at the "bottom" of player one's hand
