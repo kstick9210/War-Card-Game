@@ -43,6 +43,7 @@ $("#start").on("click", renderStart)
 // $("#rules").on("click", showRules)
 $("#flip").on("click", flipCard)
 $("#take").on("click", takeCards)
+$("#reset").on("click", init)
 
 /*----- functions -----*/
 // TODO: functions needed: renderFlip, flipCard, war (to be called by flipCard), checkWinner, reset
@@ -54,6 +55,7 @@ function init() {
   buildMasterDeck();
   renderShuffledDeck();
   $("#game-board").hide();
+  $("#landing-page").show(); // ensures landing page is displayed when reset button is clicked
   $("div > p").hide();
   landingEls.$rules.html("Rules");
   landingEls.$start.html("Start");
@@ -81,7 +83,7 @@ function renderFlip() {
     $playerTwoInPlay.append(`<div class="card ${recentCard2}"></div>`);
 }
 function takeCardsRender() {
-    const $playerOneInPlay = $("#in-play1"); // need  child selector?
+    const $playerOneInPlay = $("#in-play1");
     $playerOneInPlay.empty();
     const $playerTwoInPlay = $("#in-play2");
     $playerTwoInPlay.empty();
@@ -98,7 +100,7 @@ function renderWar() {
   console.log(`this message should be on the game board: ${gameBoardEls.$gameMsg}`)
 }
 function renderWinner() {
-  // modal here?
+  gameBoardEls.$gameMsg.html(`${winner} wins!`);
 }
 function renderShuffledDeck() {
     // Create a copy of the masterDeck (leave masterDeck untouched!)

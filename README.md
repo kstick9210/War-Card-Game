@@ -28,4 +28,5 @@
 ## Next Steps
 * Update deal function so that it assigns alternating cards to each player rather than splitting the deck down the middle
 * Add visuals to cards being dealt
+* Render cards stacked on top of each other during war sequence rather than side by side
 * Allow users to enter names to take the place of "Player 1" and "Player 2"
