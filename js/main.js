@@ -124,7 +124,6 @@ function deal() {
 }
 function flipCard() {
     if (winner) return; // prevent users from fliping cards if game is over
-    // if (players.one.inPlay.length > 0 || players.two.inPlay.length > 0) return // prevent users from flipping cards until current turn is resolved
     if (players.one.inPlay.length > 0 && players.one.inPlay[0].value !== players.two.inPlay[0].value) return // prevent users from flipping cards if cards are in play and it is not war
     for (const player in players) {
       players[player]["inPlay"].unshift(players[player]["hand"][0]);
@@ -139,7 +138,7 @@ function takeCards() {
   if (players.one.inPlay[0].value > players.two.inPlay[0].value) {
     Array.prototype.push.apply(players.one.hand, players.one.inPlay) // take player one's current cards and put them at the "bottom" of player one's hand
     Array.prototype.push.apply(players.one.hand, players.two.inPlay) // take player two's current cards and put them at the "bottom" of player one's hand
-    players.one.inPlay = []; // reset inPlay arrays once winner of th round has taken cards
+    players.one.inPlay = []; // reset inPlay arrays once winner of the round has taken cards
     players.two.inPlay = [];
     takeCardsRender();
   } else {
