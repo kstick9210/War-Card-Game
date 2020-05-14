@@ -9,7 +9,6 @@ body {
     font-family: 'Teko', sans-serif;
 }
 header {
-    grid-area: header;
     font-weight: 500;
     font-size: 80px;
     text-align: center;
@@ -17,16 +16,34 @@ header {
 #landing-page {
     display: grid;
     grid-template-columns: 6vw 11vw 5vw;
-    grid-template-rows: 52vh 6vh;
+    grid-template-rows: 43vh 6vh;
     grid-template-areas:
         "landing-card-back landing-card-back landing-card-back"
         "rules . start";
+    justify-content: center;
     font-weight: 400;
     font-size: 45px;
 }
 .click { cursor: pointer; }
 .click:hover { transform: scale(1.2); }
 #rules { grid-area: rules; }
+#rules-expand {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 20px;
+    width: 30vw;
+}
+#return { 
+    text-align: center;
+    margin-top: 15px;
+}
+#bicycle { 
+    font-size: 15px;
+    color: #807E75;
+}
+a { 
+    text-decoration: none;
+    color: inherit;
+}
 #start {
     grid-area: start;
     text-align: right;
@@ -35,7 +52,8 @@ header {
     grid-area: landing-card-back;
     background-color: white;
     border-radius: 5%;
-    width: 22vw;
+    height: 42vh;
+    justify-self: center;
 }
 #game-board {
     display: grid;
@@ -94,5 +112,30 @@ header {
 #reset {
     grid-area: reset;
     text-align: center;
-    padding-top: 1em;
+    margin-top: 1em;
+}
+@media only screen and (max-width: 768px) {
+    #landing-page {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+        "landing-card-back landing-card-back"
+        "rules start";
+    font-weight: 400;
+    font-size: 40px;
+    }
+    header { font-size: 70px; }
+    #rules-expand { width: 60vw; }
+    #game-board {
+        grid-template-columns: 30vw 30vw 30vw;
+        grid-template-areas: 
+            "player1 msg player2"
+            "count1 flip count2"
+            "card-back1 . card-back2"
+            "in-play1 . in-play2"
+            ". take ."
+            ". reset .";
+        font-weight: 300;
+        font-size: 35px;
+    }
+    #in-play2 { justify-self: right; }
 }
