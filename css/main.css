@@ -131,11 +131,11 @@ a {
             "player1 msg player2"
             "count1 flip count2"
             "card-back1 . card-back2"
-            "in-play1 . in-play2"
-            ". take ."
-            ". reset .";
+            "in-play1 take in-play2"
+            "in-play1 reset in-play2";
         font-weight: 300;
         font-size: 35px;
     }
     #in-play2 { justify-self: right; }
+    #reset { align-self: end; }
 }

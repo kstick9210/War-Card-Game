@@ -25,6 +25,7 @@
 * CSS
 * Javascript/jQuery
 ## Getting Started
+[CLick here to launch game](https://kstick9210.github.io/War-Card-Game/)
 ## Next Steps
 * Update deal function so that it assigns alternating cards to each player rather than splitting the deck down the middle
 * Add visuals to cards being dealt
